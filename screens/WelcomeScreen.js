@@ -5,15 +5,19 @@ import { TouchableOpacity } from 'react-native';
 const WelcomeScreen = (props) =>{
     // console.log(props);
  const navigateToLogin = () =>{
-    //  console.log(props);
-    props.navigation.navigate("LoginScreen");
+    props.navigation.navigate("LoginScreen", {
+        firstName:'John',
+        LastName:'Doe',
+        age:23,
+    });
  }
     return(
         <View style={styles.container}>
             <Text style={{color:"white", fontSize:20}}>Welcome screen</Text>
             <TouchableOpacity onPress={navigateToLogin}>
                 <View style={styles.button}>
-                    <Text>Login</Text>
+                    <Text style={{fontSize:15,
+                    fontWeight:'bold',padding:10}}>Login</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -31,10 +35,9 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         color:'black',
         borderWidth:2,
-        paddingHorizontal:20,
-        paddingVertical:10,
-        marginTop:5,
-        borderColor:'aqua',
+        marginTop:10,
+        paddingHorizontal:10,
+        borderColor:'#2980b9',
         borderRadius:5,
         
       },

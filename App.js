@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
+import HomeScreen from './screens/HomeScreen';
 // const Stack = createStackNavigator();
 // console.log('Stack : ', Stack);
 
@@ -14,7 +15,7 @@ const App = () =>{
             <Navigator screenOptions={{
                 //style general de la navigation
                 headerStyle:{
-                    backgroundColor:"aqua",
+                    backgroundColor:"#34495e",
                 },
                 headerTintColor:"white",
                 headerTitleAlign:"center",
@@ -40,6 +41,13 @@ const App = () =>{
                         },
                 }}
                 
+                />
+                <Screen name="HomeScreen"
+                component={HomeScreen}
+                options={{
+                    title:"Home",
+                    // headerShown:false,
+                }}
                 />
             </Navigator>
 

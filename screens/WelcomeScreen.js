@@ -13,11 +13,12 @@ const WelcomeScreen = (props) =>{
  }
     return(
         <View style={styles.container}>
-            <Text style={{color:"white", fontSize:20}}>Welcome screen</Text>
+            <Text style={{color:"white", fontSize:20, fontFamily:'supermercado'}}>Welcome screen</Text>
             <TouchableOpacity onPress={navigateToLogin}>
                 <View style={styles.button}>
                     <Text style={{fontSize:15,
-                    fontWeight:'bold',padding:10}}>Login</Text>
+                    fontWeight:'bold',padding:10
+                   }}>Login</Text>
                 </View>
             </TouchableOpacity>
         </View>

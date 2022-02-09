@@ -11,7 +11,7 @@ const HomeScreen = (props) =>{
     },[])
     return(
         <View style={styles.container}>
-            <Text style={{color:"white"}}>
+            <Text style={{color:"white",fontFamily:"architech", fontSize:20}}>
                 Welcome {user.firstName} {user.LastName} !
             </Text>
         </View>

@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, ScrollView } from 'react-native';
-import { FlatList,TouchableHighlight } from 'react-native';
+import { FlatList,TouchableHighlight, TouchableOpacity } from 'react-native';
 const Logo = require("./assets/images/m2i-logo.png");
 const imgUrl ="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/4e12aef886065a104d78b6206528b6f4";
 const users =[
@@ -242,11 +242,13 @@ export default function App() {
   return (
     // <ScrollView>
       <View style={styles.container}>
+        <TouchableOpacity onPress={()=>console.log("test opacity")}>
         <Image 
         // source={Logo}
         source={{uri: imgUrl}}
         style={styles.imgLogo}
         />
+        </TouchableOpacity>
         <TouchableHighlight onPress={()=>console.log("test touchableHigh")}>
         <Text style={styles.text}>2i-Tech-Paris-2</Text>
         </TouchableHighlight>

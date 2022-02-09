@@ -16,15 +16,27 @@ const App = () =>{
     useEffect(()=>{
         loadRessources();
     },[]);
+
+    const [loading, setLoading] = useState(true);
     const loadRessources = async () =>{
         try {
             await Font.loadAsync({
                 "supermercado": require("./assets/Fonts/ArchitectsDaughter-Regular.ttf"),
                 "architech": require("./assets/Fonts/ArchitectsDaughter-Regular.ttf")
             })
+            setLoading(false);
         } catch (error) {
             console.log("erreur lors du chargement des ploices", error)
         }
+    }
+    if(loading){
+        return(
+            <View>
+                <Text style={styles.container}>
+                    Loading...
+                </Text>
+            </View>
+        )
     }
     return(
         <NavigationContainer>
@@ -70,4 +82,12 @@ const App = () =>{
         </NavigationContainer>
     )
 }
+const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        backgroundColor: 'black',
+        justifyContent: 'center',
+        alignItems:'center',
+      },
+})
 export default App;

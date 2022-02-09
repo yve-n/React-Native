@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, ScrollView } from 'react-native';
-import { FlatList } from 'react-native';
+import { FlatList,TouchableHighlight } from 'react-native';
 const Logo = require("./assets/images/m2i-logo.png");
 const imgUrl ="https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/4e12aef886065a104d78b6206528b6f4";
 const users =[
@@ -247,7 +247,9 @@ export default function App() {
         source={{uri: imgUrl}}
         style={styles.imgLogo}
         />
+        <TouchableHighlight onPress={()=>console.log("test touchableHigh")}>
         <Text style={styles.text}>2i-Tech-Paris-2</Text>
+        </TouchableHighlight>
         <TextInput placeholder='Entrer votre texte' placeholderTextColor='#fff'
         value={state}
         onChangeText={value => setState(value)}
@@ -266,7 +268,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container:{
-    flex:2,
+    flex:1,
     backgroundColor: 'black',
     borderColor:'red',
     borderWidth:2,
@@ -277,7 +279,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight:'bold',
     padding:2, 
-    marginBottom: 10
+    marginBottom: 10,
+    fontSize:25,
 
   },
    textInput:{

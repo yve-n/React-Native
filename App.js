@@ -23,7 +23,8 @@ const App = () =>{
         try {
             await Font.loadAsync({
                 "supermercado": require("./assets/Fonts/SupermercadoOne-Regular.ttf"),
-                "architech": require("./assets/Fonts/ArchitectsDaughter-Regular.ttf")
+                "architech": require("./assets/Fonts/ArchitectsDaughter-Regular.ttf"),
+                "festive":require("./assets/Fonts/Festive-Regular.ttf")
             })
              setLoading(false);
         } catch (error) {
@@ -79,7 +80,11 @@ const App = () =>{
                 }}
                 />
                  <Screen name="CountriesScreen" component={CountriesScreen} options={{
-                    title: "All countries "
+                    title: "All countries ",
+                    headerTitleStyle:{
+                        fontFamily:'festive',
+                        fontSize:30,
+                    }
                 }}/>
             </Navigator>
 

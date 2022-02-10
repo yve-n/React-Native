@@ -1,60 +1,108 @@
-import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from "react";
-import {View, ScrollView ,FlatList, Text, Image, StyleSheet, Button} from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, 
+    ScrollView, Image, Button,TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
-const CountriesScreen = () =>{
+const CountriesScreen = (props) => {
+
     const [countries, setCountries] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
 
-    useEffect(()=>{
-        //appel api pour recuperer la liste des pays
-        axios.get("https://restcountries.com/v3.1/all")
-        .then(response=>{
-            console.log("countries============ : ",response.data[0])
-            const countries = response.data.map(country=>{
-                return{
-                    commonName:country.name.common,
-                    frenchName: country.translations.fra.official ,
-                    region: country.region,
-                    flag: country.flags.png,
-                    population: country.population,
-                    capital: country.capital ? country.capital[0] : "undefined",
-                    carSide: country.side === 'right'? "à droite" : "à gauche",
-                    id:country.altSpellings[0],
-                }
+    useEffect(() => {
+        //Appel API pour récupérer la liste des pays
+        handleRegionSelection('all')
+    }, [])
+
+    const handleRegionSelection = (region) => {
+        let param = ``;
+        if(region === "all")
+            param = region
+        else
+            param = `region/${region}`;
+        setLoading(true);
+        axios.get("https://restcountries.com/v3.1/" + param)
+            .then(response => {
+                //console.log("Rest countries response => ", response.data[0])
+                const countries = response.data.map(country => {
+                    return {
+                        commonName: country.name.common,
+                        frenchName: country.translations.fra.official,
+                        region: country.region,
+                        flag: country.flags.png,
+                        population: country.population,
+                        capital: country.capital ? country.capital[0] : "Non défini",
+                        carSide: country.side === "right" ? "à droite" : "à gauche",
+                        id: country.altSpellings[0]
+                    }
+                })
+                setCountries(countries);
+                setLoading(false);
             })
-            setCountries(countries);
-        })
-        .catch(error=>{
-            console.log(error)
-        })
+            .catch(error => {
+                console.error(error);
+            })
+    }
 
-    },[])
+    let pagination = [];
+    let countriesList = [];
+    if(countries) {
+        let end = countries.length / 10;
+        if(countries.length % 10 !== 0)
+            end++;
+        for (let i=1; i<= end; i++) {
+            pagination.push(
+                <TouchableOpacity style={styles.touch} onPress={() => setCurrentPage(i)}>
+                    <Text style={styles.pageButton}>{i}</Text>
+                </TouchableOpacity>
+            )
+        }
+        const beginList = (currentPage - 1) * 10;
+        const endList = currentPage * 10;
+        countriesList = countries.slice(beginList, endList);
+    }
 
-    return(
-        
+    return (
         <View style={styles.container}>
-            <Text style={styles.title}>Country Screen</Text>
+            <Text style={styles.title}>Countries</Text>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.touch} onPress={() => handleRegionSelection('all')}><Text style={styles.regionButton}>ALL</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.touch} onPress={() => handleRegionSelection('Africa')}><Text style={styles.regionButton}>Afrique</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.touch} onPress={() => handleRegionSelection('Americas')}><Text style={styles.regionButton}>Amériques</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.touch} onPress={() => handleRegionSelection('Asia')}><Text style={styles.regionButton}>Asie</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.touch} onPress={() => handleRegionSelection('Europe')}><Text style={styles.regionButton}>Europe</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.touch} onPress={() => handleRegionSelection('Oceania')}><Text style={styles.regionButton}>Océanie</Text></TouchableOpacity>
+            </View>
+            {
+                loading && <View>
+                    <Text style={styles.title}>Loading.....</Text>
+                </View>
+            }
+            <Text style={styles.title}>Nombre de pays : {countries.length}</Text>
+            <View style={styles.buttonContainer}>{pagination}</View>
             
-            <FlatList  data ={countries} 
-                renderItem={country=>
+            <FlatList 
+                data={countriesList}
+                renderItem={country => 
                     <View style={styles.countryItem}>
-                        <Image style={styles.flag} source={{uri : country.item.flag}}></Image>
-                        <Text style={styles.itemInfo}>Nom commun : {country.item.commonName}</Text>
-                        <Text style={styles.itemInfo}>Nom Français : {country.item.frenchName}</Text>
-                        <Text style={styles.itemInfo}>Region : {country.item.region}</Text>
-                        <Text style={styles.itemInfo}>Nombre d'habitants : {country.item.population}</Text>
-                        <Text style={styles.itemInfo}>capital : {country.item.capital}</Text>
-                        <Text style={styles.itemInfo}>style de conduite : {country.item.carSide}</Text>
+                        <Image style={styles.flag} source={{uri: country.item.flag}} />
+                        <View style={styles.containerInfos}>
+                            <Text style={styles.itemInfo}>Nom commun : {country.item.commonName}</Text>
+                            <Text style={styles.itemInfo}>Nom français : {country.item.frenchName}</Text>
+                            <Text style={styles.itemInfo}>Région : {country.item.region}</Text>
+                            <Text style={styles.itemInfo}>Capitale : {country.item.capital}</Text>
+                            <Text style={styles.itemInfo}>Style de conduite : {country.item.carSide}</Text>
+                        </View>
                     </View>
                 }
-                keyExtractor={country=>country.id}
+                keyExtractor={country => country.id}
             />
-            <StatusBar style="auto"/>
+            <StatusBar style="auto" />
         </View>
-        
-    )
+    );
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -62,37 +110,74 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    flag:{
-        width:100,
-        height:100,
-        marginBottom:10,
-        borderWidth:1,
-        borderColor:'#fff',
-    },
-    title:{
+    title: {
         color: 'white',
-        fontFamily: "supermercado", 
-        fontSize: 25,
-        marginBottom:10,
-        marginTop:15,
-        padding:10,
+        fontFamily: "supermercado",
+        fontSize: 20,
+        marginVertical: 10
     },
-    countryItem:{
-        marginTop:15,
-        justifyContent: 'center',
-        alignItems:'center',
-        borderWidth:2,
-        borderColor:'white',
+    buttonContainer: {
+        flexDirection: "row",
+        flexWrap: 'wrap',
+       justifyContent: 'center',
+       alignItems:'center',
+       marginVertical:10,
+    },
+    regionButton: {
+        alignSelf: 'flex-start',
+        width: 'auto',
+        // backgroundColor: "#34495e",
+        color: "white",
+        fontSize: 17,
+        padding: 3,
+        marginHorizontal: 3,
+
+    },
+    pageButton:{
+        alignSelf: 'flex-start',
+        width: 'auto',
+        // backgroundColor: "aqua",
+        color: "white",
+        fontSize: 17,
+        // marginHorizontal: 3,    
+    },
+    touch:{
         padding:5,
-    }, 
-    itemInfo:{
+        lineHeight:10,
+        borderRadius:6,
+        borderColor: 'white',
+        borderWidth:2,
+        marginHorizontal:3,
+        marginVertical:3,
+    },
+    countryItem: {
+        marginTop: 20,
+        paddingVertical: 15,
+        paddingHorizontal: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'white',
+        flexDirection:'row',
+        flexWrap:'wrap',
+       justifyContent:'space-around'
+    },
+    flag: {
+        width: 100,
+        height: 50,
+        marginBottom: 15,
+        borderWidth: 1,
+        borderColor: "#fff"
+    },
+    itemInfo: {
         color: 'white',
-        fontFamily: "architech", 
-        fontSize: 10,
-        marginBottom:5,
-        marginTop:2,
-        textAlign:'center',
+        marginTop: 5,
+        textAlign: 'center'
+    },
+    containerInfos:{
+        flexDirection:'column',
     }
 
 })
+
 export default CountriesScreen;

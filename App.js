@@ -21,10 +21,10 @@ const App = () =>{
     const loadRessources = async () =>{
         try {
             await Font.loadAsync({
-                "supermercado": require("./assets/Fonts/ArchitectsDaughter-Regular.ttf"),
+                "supermercado": require("./assets/Fonts/SupermercadoOne-Regular.ttf"),
                 "architech": require("./assets/Fonts/ArchitectsDaughter-Regular.ttf")
             })
-            setLoading(false);
+             setLoading(false);
         } catch (error) {
             console.log("erreur lors du chargement des ploices", error)
         }

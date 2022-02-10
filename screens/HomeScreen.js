@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, Image} from 'react-native';
 import { useEffect, useState } from 'react';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+
 
 
 const HomeScreen = (props) =>{
@@ -8,17 +10,14 @@ const HomeScreen = (props) =>{
     const [user, setUser] = useState({});
     useEffect(() => {
         //recuperation des données user via le asynstorage
-        // useAsyncStorage('userDetails').getItem()
-        // .then(userDetails=>{
-        //     // console.log('user', userDetails)
-        //     setUser(JSON.parse(userDetails))
-        // })
-        // .catch(error=>{
-        //     console.log(error)
-        // })
-        //recuperation des données user via les props
-        setUser(props.route.params)
-        console.log(props.route.params);
+        useAsyncStorage('userDetails').getItem()
+        .then(userDetails=>{
+            // console.log('user', userDetails)
+            setUser(JSON.parse(userDetails))
+        })
+        .catch(error=>{
+            console.log(error)
+        })
     }, [])
     return(
         <View style={styles.container}>

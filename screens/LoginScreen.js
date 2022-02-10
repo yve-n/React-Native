@@ -4,6 +4,8 @@ import { TouchableOpacity, Button } from 'react-native';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 //popup => assurer que l'authentification a été effectuée correctement
    WebBrowser.maybeCompleteAuthSession();
@@ -31,12 +33,19 @@ const LoginScreen = (props) =>{
                             const userDetails = response.data;
                             console.log("details", userDetails);
                             const {given_name, family_name,email,picture} =userDetails;
-                            props.navigation.navigate("HomeScreen",{
+                            AsyncStorage.setItem('userDetails', JSON.stringify({
                                 firstName : given_name,
                                 LastName : family_name,
                                 email : email,
-                                picture:picture,
-                            });
+                                picture:picture, 
+                            }))
+                            .then(()=>{
+                                // console.log("stockage des infos users dans le asynStorage")
+                                props.navigation.navigate("HomeScreen");
+                            })
+                            .catch(error=>{
+                                console.log("AsyncStorage call to setItem failure : ",error)
+                            })
                         })
                         .catch(error=>{
                             console.log(error)

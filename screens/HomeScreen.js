@@ -1,11 +1,14 @@
-import { View, Text, StyleSheet, Image} from 'react-native';
+import { View, Text, StyleSheet, Image, Button} from 'react-native';
 import { useEffect, useState } from 'react';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 
 
 const HomeScreen = (props) =>{
-    //  console.log(props.route.params.firstName)
+    const navigateToCountries = () => {
+        //console.log(props);
+        props.navigation.navigate("CountriesScreen");
+    }
 
     const [user, setUser] = useState({});
     useEffect(() => {
@@ -26,6 +29,9 @@ const HomeScreen = (props) =>{
                 Welcome {user.firstName} {user.LastName} !
             </Text>
             <Text style={styles.text}>You're logged in with email : {user.email}</Text>
+            <Button title='see countries' onPress={() => {
+                navigateToCountries()
+            }}/>
 
         </View>
     )

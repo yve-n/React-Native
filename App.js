@@ -3,18 +3,14 @@ import { useEffect, useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, ScrollView } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import * as Font from 'expo-font';
 import CountriesScreen from './screens/CountriesScreen';
-import * as React from 'react';
-// const Stack = createStackNavigator();
-// console.log('Stack : ', Stack);
 
-// const {Navigator, Screen } = createStackNavigator();
-const Drawer = createDrawerNavigator();
+
+const {Navigator, Screen } = createStackNavigator();
 const App = () =>{
     //gestion des polices 
     useEffect(()=>{
@@ -45,68 +41,7 @@ const App = () =>{
     }
     return(
         <NavigationContainer>
-            <Drawer.Navigator 
-            drawerType="front"
-            initialRouteName='WelcomeScreen'
-            drawerContentOptions={{
-                activeTintColor:'#34495e',
-                itemStyle:{marginVertical:10},
-            }}
-            >
-                <Drawer.Screen name='WelcomeScreen'
-                  component={WelcomeScreen} 
-                  options={{
-                      title:"Welcome",
-                      headerStyle:{
-                         backgroundColor:"#34495e",
-                        },
-                    }}
-                />
-                <Drawer.Screen  name='LoginScreen'
-                    component={LoginScreen}
-                    options={{
-                        //style specifique à chaque screen
-                            // headerLeft:false,
-                            title:"connection",
-                            headerStyle:{
-                                backgroundColor:"grey",
-                            },
-                    }}
-                />
-                <Drawer.Screen  name='HomeScreen'
-                    component={HomeScreen}
-                    options={{
-                        title:"Home",
-                        // headerShown:false,
-                        headerStyle:{
-                            backgroundColor:"green",
-                        },
-                    }}
-                />
-                <Drawer.Screen name='CountriesScreen'
-                    component={CountriesScreen}
-                    options={{
-                        title: "All countries ",
-                        headerTitleStyle:{
-                            fontFamily:'festive',
-                            fontSize:30,
-                        }
-                    }}
-                />
-                {/* {
-                    DrawerItems.map(drawer=>
-                      <Drawer.Screen key={drawer.name} name={drawer.name}
-                      component={
-                          drawer.name==='WelcomeScreen'? WelcomeScreen
-                          :drawer.name==='LoginScreen' ? LoginScreen
-                          :drawer.name==='HomeScreen' ? HomeScreen
-                          : CountriesScreen
-                      }
-                    />
-                    )
-                } */}
-            </Drawer.Navigator>
-            {/* <Navigator screenOptions={{
+            <Navigator screenOptions={{
                 //style general de la navigation
                 headerStyle:{
                     backgroundColor:"#34495e",
@@ -152,7 +87,7 @@ const App = () =>{
                     }
                 }}
                 />
-            </Navigator> */}
+            </Navigator>
 
         </NavigationContainer>
     )

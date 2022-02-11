@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         borderColor: 'white',
         flexDirection:'row',
         flexWrap:'wrap',
-       justifyContent:'space-around'
+       justifyContent:'space-around',
     },
     flag: {
         width: 100,

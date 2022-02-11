@@ -8,6 +8,7 @@ import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import * as Font from 'expo-font';
 import CountriesScreen from './screens/CountriesScreen';
+import CountryDetailsScreen from './screens/CountryDetailsScreen';
 
 
 const {Navigator, Screen } = createStackNavigator();
@@ -81,6 +82,15 @@ const App = () =>{
                  <Screen name="CountriesScreen" component={CountriesScreen} 
                  options={{
                     title: "All countries ",
+                    headerTitleStyle:{
+                        fontFamily:'festive',
+                        fontSize:30,
+                    }
+                }}
+                />
+                <Screen name="CountryDetailsScreen" component={CountryDetailsScreen} 
+                 options={{
+                    title: "Country Details ",
                     headerTitleStyle:{
                         fontFamily:'festive',
                         fontSize:30,

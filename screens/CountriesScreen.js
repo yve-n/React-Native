@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, 
+import { View, Text, FlatList, StyleSheet, TextInput,
     ScrollView, Image, Button,TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
@@ -9,11 +9,22 @@ const CountriesScreen = (props) => {
     const [countries, setCountries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState('');
+    const [CountriesFilter, setFilterCountries]=useState([]);
 
     useEffect(() => {
         //Appel API pour récupérer la liste des pays
         handleRegionSelection('all')
+        //  setFilterCountries(countries);
+        //  setCountries(countries);
     }, [])
+
+    const NavigateToCountriesDetails = (countryName)=>{
+        //navigation vers la country details screen
+        props.navigation.navigate("CountryDetailsScreen",{
+            countryName
+        });
+    }
 
     const handleRegionSelection = (region) => {
         let param = ``;
@@ -47,7 +58,7 @@ const CountriesScreen = (props) => {
     }
 
     let pagination = [];
-    let countriesList = [];
+    let countriesList =[];
     if(countries) {
         let end = countries.length / 10;
         if(countries.length % 10 !== 0)
@@ -62,6 +73,33 @@ const CountriesScreen = (props) => {
         const beginList = (currentPage - 1) * 10;
         const endList = currentPage * 10;
         countriesList = countries.slice(beginList, endList);
+    }
+    //implementation d'une search bar pour filtrer les pays
+    const renderHeader = ()=>{
+        return(
+            <TextInput style={styles.search} placeholder="rechercher un pays"
+            value={search}
+            onChangeText={pattern=>filterCountries(pattern)}
+            />
+        )
+    }
+    const filterCountries =(pattern) =>{
+        if(pattern){
+            setLoading(true);
+            const newCountriesList =countries.filter(country=>{
+                const countryInfo = `${country.commonName.toLowerCase()} 
+                ${country.frenchName.toLowerCase()} `;
+                const research = pattern.toLowerCase();
+                return countryInfo.indexOf(research) > -1;
+            })
+            setFilterCountries(newCountriesList);
+            setSearch(pattern);
+            setCurrentPage(1);
+            setLoading(false);
+        }else{
+            setFilterCountries(countriesList);
+            setSearch(pattern);
+        }
     }
 
     return (
@@ -84,6 +122,7 @@ const CountriesScreen = (props) => {
             <View style={styles.buttonContainer}>{pagination}</View>
             
             <FlatList 
+                // data={CountriesFilter}
                 data={countriesList}
                 renderItem={country => 
                     <View style={styles.countryItem}>
@@ -94,12 +133,18 @@ const CountriesScreen = (props) => {
                             <Text style={styles.itemInfo}>Région : {country.item.region}</Text>
                             <Text style={styles.itemInfo}>Capitale : {country.item.capital}</Text>
                             <Text style={styles.itemInfo}>Style de conduite : {country.item.carSide}</Text>
+                            <TouchableOpacity onPress={() => NavigateToCountriesDetails(country.item.commonName)}>
+                                <Text style={styles.regionButton}> See Details</Text>
+                            </TouchableOpacity>
+
                         </View>
                     </View>
                 }
                 keyExtractor={country => country.id}
+                ListHeaderComponent ={()=>renderHeader()}
             />
-            <StatusBar style="auto" />
+            
+            <StatusBar style="auto" /> 
         </View>
     );
 }
@@ -177,6 +222,15 @@ const styles = StyleSheet.create({
     },
     containerInfos:{
         flexDirection:'column',
+    },
+    search:{
+        borderColor:'white',
+        borderWidth:1,
+        textAlign:'center',
+        borderRadius:10,
+        backgroundColor: 'grey',
+
+
     }
 
 })

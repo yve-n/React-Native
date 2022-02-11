@@ -38,6 +38,7 @@ const CountriesScreen = (props) => {
                     }
                 })
                 setCountries(countries);
+                setCurrentPage(1);
                 setLoading(false);
             })
             .catch(error => {
@@ -53,7 +54,7 @@ const CountriesScreen = (props) => {
             end++;
         for (let i=1; i<= end; i++) {
             pagination.push(
-                <TouchableOpacity style={styles.touch} onPress={() => setCurrentPage(i)}>
+                <TouchableOpacity key={i} style={styles.touch} onPress={() => setCurrentPage(i)}>
                     <Text style={styles.pageButton}>{i}</Text>
                 </TouchableOpacity>
             )
